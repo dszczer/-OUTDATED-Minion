@@ -1,0 +1,11 @@
+test:
+  path: /
+  defaults: { _controller: "TestController::testAction" }
+
+test_error_500:
+  path: /error/500
+  defaults: { _controller: "TestController::testError500Action" }
+
+test_error_403:
+  path: /error/403
+  defaults: { _controller: "TestController::testError403Action" }

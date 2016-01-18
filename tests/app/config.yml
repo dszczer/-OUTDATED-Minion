@@ -1,0 +1,12 @@
+config:
+    test_config: yes!
+
+services:
+    test_service:
+        class: "Minion\\Tests\\Service\\ServiceProvider"
+        options:
+            test_service.option: hello world
+    test_tag_twig_expander:
+        class: "Minion\\Tests\\Twig\\TagExtensionTest"
+        tags:
+            - twig.extension

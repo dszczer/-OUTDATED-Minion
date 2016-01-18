@@ -1,0 +1,10 @@
+# Composer
+/vendor/
+
+# Tests
+/tests/var/
+/tests/app/propel/*
+!/tests/app/propel/runtime
+
+#PhpStorm
+/.idea
