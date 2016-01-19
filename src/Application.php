@@ -24,6 +24,7 @@ use Silex\Application as SilexApp;
 use Silex\Provider\MonologServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
+use Silex\ServiceProviderInterface as SilexServiceProviderInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -230,13 +231,10 @@ class Application extends SilexApp
                         $class = $serviceConfig->getProviderClass();
 
                         if(\count($serviceConfig->getTags()) === 0) {
-                            /** @var ServiceProviderInterface $provider */
+                            /** @var SilexServiceProviderInterface|ServiceProviderInterface $provider */
                             $provider = new $class;
-                            if(!$provider instanceof ServiceProviderInterface)
-                                throw new InvalidConfigurationException(
-                                    "Service '$id' provider must be instance of \\Minion\\Service\\ServiceProviderInterface, "
-                                    . \get_class($provider) . " given");
-                            $provider->setServiceConfig($serviceConfig);
+                            if($provider instanceof ServiceProviderInterface)
+                                $provider->setServiceConfig($serviceConfig);
                             $this->register($provider, $serviceConfig->getOptions());
                         } else {
                             $calledTags = [];
