@@ -12,7 +12,7 @@ namespace Minion\Twig;
 
 use Minion\Application;
 use Minion\Utils;
-use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -64,7 +64,7 @@ class AssetExtension extends \Twig_Extension
      * @param string $asset      Path to the asset
      * @param bool   $serverPath server-related path or web-related
      *
-     * @throws FileNotFoundException
+     * @throws FileException
      *
      * @return string
      */
@@ -75,7 +75,7 @@ class AssetExtension extends \Twig_Extension
         $assetPath = Utils::fixPath($this->container->getRootDir() . '/web/' . $path);
 
         if(!\file_exists($assetPath))
-            throw new FileNotFoundException("Asset '$asset' with path '$assetPath' not found");
+            throw new FileException("Asset '$asset' with path '$assetPath' not found");
 
         if(!$serverPath)
             if($request instanceof Request)
