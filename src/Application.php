@@ -49,6 +49,7 @@ use Symfony\Component\Yaml\Yaml;
 class Application extends SilexApp
 {
     const VERSION = '1.0.0';
+
     /** @var string Project root directory */
     protected $rootDir;
     /** @var string Package directory */
@@ -114,7 +115,11 @@ class Application extends SilexApp
      *
      * @return Application
      *
-     * @throws \Exception
+     * @throws \InvalidArgumentException     Missing propel configuration file
+     * @throws \InvalidArgumentException     Can not resolve project namespace
+     * @throws InvalidConfigurationException Twig engine is not enabled, but extension configured in config.yml file
+     * @throws \RuntimeException             File parameters.yml does not exist
+     * @throws \Exception                    Throws raw exceptions in test environment
      */
     public function __construct($appNamespace = '', array $values = [], array $fixPaths = []) {
         // big error catch for nice debug
@@ -272,6 +277,8 @@ class Application extends SilexApp
     }
 
     /**
+     * @internal
+     *
      * Handle errors and exceptions thrown by entire application.
      *
      * @param \Exception $ex   Any exception
@@ -289,9 +296,9 @@ class Application extends SilexApp
         if($this['debug'])
             return $response;
         else {
-            $twig = $this['twig'];
-            $blank = new Response();
-            $blankTemplate = <<<'HTML'
+            if($this['minion.useTwig'])
+                $twig = $this['twig'];
+            $content = <<<'HTML'
 <!DOCTYPE html>
 <html>
     <head><title>Error %d</title></head>
@@ -299,42 +306,25 @@ class Application extends SilexApp
 </html>
 HTML;
 
-            switch($code) {
-                case 403:
-                    $tpl = 'Static/403.html.twig';
-                    if(!Utils::templateExists($twig, $tpl)) {
-                        $blank->setStatusCode(403);
-                        $blank->setContent(\str_replace('%d', 403, $blankTemplate));
-                        return $blank;
-                    }
-                    $response->setContent($twig->render($tpl, ['exception' => $ex]));
-                    break;
-                case 404:
-                    $tpl = 'Static/404.html.twig';
-                    if(!Utils::templateExists($twig, $tpl)) {
-                        $blank->setStatusCode(404);
-                        $blank->setContent(\str_replace('%d', 404, $blankTemplate));
-                        return $blank;
-                    }
-                    $response->setContent($twig->render($tpl, ['exception' => $ex]));
-                    break;
-                default:
-                case 500:
-                    $tpl = 'Static/500.html.twig';
-                    if(!Utils::templateExists($twig, $tpl)) {
-                        $blank->setStatusCode(500);
-                        $blank->setContent(\str_replace('%d', 500, $blankTemplate));
-                        return $blank;
-                    }
-                    $response->setContent($twig->render($tpl, ['exception' => $ex]));
-                    break;
-            }
+            if($this['minion.useTwig']) {
+                $tpl = "Static/$code.html.twig";
+                if(!Utils::templateExists($twig, $tpl))
+                    $content = \str_replace('%d', $code, $content);
+                else
+                    $content = $twig->render($tpl, ['exception' => $ex]);
+            } elseif(\file_exists($tpl = Utils::fixPath($this->getRootDir() . "/Static/$code.html.php")))
+                $content = Utils::renderPhpTemplate($tpl, ['exception' => $ex]);
+
+            $response->setStatusCode($code);
+            $response->setContent($content);
 
             return $response;
         }
     }
 
     /**
+     * @internal
+     *
      * Terminate application immediately and show exception to the client. Does not trigger any events.
      *
      * @param \Exception $exception Exception instance
@@ -355,7 +345,7 @@ HTML;
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException Some paths are invalid
      */
     protected function resolvePaths(array $fixPaths) {
         $this->rootDir = \realpath(isset($fixPaths['rootDir']) ? $fixPaths['rootDir'] : __DIR__ . '/../../../../');

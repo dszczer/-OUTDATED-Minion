@@ -57,7 +57,7 @@ class MiscExtension extends \Twig_Extension
      * @param callable $callable  Fully qualified static method or function name
      * @param array    $arguments Optional arguments
      *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException Callable must be string type
      *
      * @return mixed
      */

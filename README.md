@@ -40,8 +40,8 @@ Type in console `composer require dszczer/minion`.
 |       +-- [views]*
 |
 +-- [var]*
-|   +-- [cache] (must have write rights)
-|   +-- [log] (must have write rights)
+|   +-- [cache] (must have write permission)
+|   +-- [log] (must have write permission)
 |
 +-- [vendor]* (Composer dependencies)
 |
@@ -65,9 +65,28 @@ $app->run();
 ```
 You will need to configure your server to point `./web` directory as the **only one** with public access, and `index.php` as directory index. Look [here](http://silex.sensiolabs.org/doc/web_servers.html) for more information.
 
+##### Application environments
+Avaliable environments:
+- `prod` **production** - production environment which should be used in production server
+- `test` **testing** - testing environment which disable handling error exceptions
+
+##### Initial configuration
+You can pass several options into second  `__construct()` argument Application's method:
+- bool `debug` - debugging mode, true to enable, false to disable
+- string `environment` `['prod'|'test']` - working application's environment
+- bool `minion.usePropel` - true to use Propel ORM, false to don't
+- bool `minion.useTwig` - true to use Twig templating, false to don't
+
+#### Custom project directory structure
+If you want to use other directory structure or you have no choice (e.g. shared hosting), you can define custom paths as third `__construct` Application's method:
+- string `rootDir` - project root directory
+- string `packageDir` - Minion vendor's directory root
+- string `configPath` - configuration files path, default is `/app/`
+- string `propelConfigPath` - Propel sensitive-data and project-specific `propel.php` configuration file path; ignored if option `minion.usePropel` is `false`
+
 #### Routing
 ##### Routing map
-Routing map file is based on [Symfony 2 routing files](http://symfony.com/doc/2.8/book/routing.html#basic-route-configuration).
+Routing map file is based on [Symfony 2 routing files](http://symfony.com/doc/2.8/book/routing.html#basic-route-configuration) component.
 ```yaml
 # app/routing.yml
 
@@ -104,4 +123,136 @@ class DefaultController extends Controller
     }
 }
 ```
-**IMPORTANT:** action shall **always** return an `Symfony\HttpFoundation\Response` object.
+**IMPORTANT:** action shall **always** return an `Symfony\HttpFoundation\Response` object *(exactly like in Symfony 2)*.
+For more information about avaliable methods, look into [API documentation](doc/index.html#Controller).
+
+#### Services
+Services in Minion are something between Silex and Symfony 2. They are expandable, flexible and easy in use.
+
+##### Writing own service
+First, you must write a new Service class:
+```php
+// src/Service/MyService.php
+
+namespace Project\Service;
+
+class MyService
+{
+    public function foo()
+    {
+        return 'bar';
+    }
+}
+```
+
+Then, you should write provider class:
+```php
+// src/Service/CustomServiceProvider.php
+
+namespace Project\Service;
+
+use \Minion\Service\ServiceProvider;
+use \Silex\Application as SilexApp;
+
+class CustomServiceProvider extends ServiceProvider
+{
+    public function register(SilexApp $app)
+    {
+        $config = $this->getServiceConfig();
+        $app[ $config->getId() ] = $app->share(function(SilexApp $app) {
+            return new MyService();
+        });
+    }
+    
+    public function boot(SilexApp $app) {}
+}
+```
+`CustomServiceProvider` **shall** extend `Minion\Service\ServiceProvider` basic class or implement `Minion\Service\ServiceProviderInterface` interface.
+Of course, instead of sharing a new service, you are fully able to extend an exisitng one. Example below is extending Twig with `Twig_Extension` class:
+```php
+// src/Service/CustomServiceProvider.php
+
+namespace Project\Service;
+
+use \Minion\Service\ServiceProvider;
+use \Silex\Application as SilexApp;
+
+class CustomServiceProvider extends ServiceProvider
+{
+    public function register(SilexApp $app)
+    {
+        $app['twig'] = $app->share($app->extend('twig', function (\Twig_Environment $twig, SilexApp $app) {
+            $class = $this->getServiceConfig()->getOption('twig.extension.class'); // is \Project\Util\MyTwigExtension
+            $twig->addExtension(new $class);
+
+            return $twig;
+        }));
+    }
+    
+    public function boot(SilexApp $app) {}
+}
+```
+Finally, you can define your custom service in `app/config.yml` file:
+```yml
+# app/config.yml
+
+services:
+    my_custom_service_id: # unique service id
+        class: "Project\\Service\\CustomServiceProvider" # service provider's fully qualified class name
+        options:  # options accesible inside service provider
+            twig.extension.class: "\\Project\\Util\\MyTwigExtension"
+```
+And Voile'a! You have registered your new service. You can use it for e.g. inside controller's action:
+```php
+// ...
+class DefaultController extends Controller
+{
+    public function defaultAction(Request $request, Application $app) {
+        $myServiceName = $app['my_custom_service']->foo(); // should return 'bar'
+    }
+}
+```
+###### *HINT*: Minion has it's own Twig extension service provider expander, so you don't have to write your own one. [Read more below](#service-tags).
+
+
+##### Service configuration
+Inside service provider's `register` method you have full access to service configuration, thanks to `Minion\Service\ServiceConfigInterface`:
+```php
+// ...
+
+class CustomServiceProvider extends ServiceProvider
+{
+    public function register(SilexApp $app)
+    {
+        $serviceConfiguration = $this->getServiceConfig();
+    }
+    
+    // ...
+}
+```
+
+##### Service tags
+Service tags are marks for Minion to use build-in service provider and are special case use. Avaliable tags:
+- `twig.extension`
+
+**Tag `twig.extension`** is defined in `app/config.yml` like below:
+```yml
+# app/config.yml
+
+services:
+    my_custom_twig_extension_id:
+        class: "\\Project\\Twig\\MyCustomTwigExtension"
+        #options:   # optional
+        tags:
+            - twig.extension
+```
+
+##### Build-in Twig extensions, ready to use
+List of build-in twig extensions:
+- `AssetExtension` - assets for web use, helps to define web side or server side related paths
+- `MiscExtension` - some miscellaneous functions thay may be useful
+- `UrlExtension` - generating links in templates with this is easy
+For more information about avaliable methods, see API documentation.
+
+## API Documentation
+Click here to see detailed API documentation.

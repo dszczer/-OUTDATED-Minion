@@ -14,6 +14,8 @@ use Minion\Service\ServiceProvider;
 use Silex\Application as SilexApp;
 
 /**
+ * {@internal it is NOT RECOMMENDED to use it outside Minion package}}
+ *
  * Class TwigExtensionTagServiceProvider.
  *
  * Allow to extend twig environment by registering extension as a service.

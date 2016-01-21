@@ -47,14 +47,7 @@ abstract class Controller implements ControllerInterface
         if($this->container['minion.useTwig'])
             return $this->container['twig']->render($path, $arguments);
         else
-            return function($this, $path, $arguments) {
-                \ob_start();
-                \extract($arguments);
-                include \Minion\Utils::fixPath($this->container->getRootDir() . '/src/' . $path);
-                $content = \ob_get_clean();
-
-                return $content;
-            };
+            return Utils::renderPhpTemplate(Utils::fixPath($this->container->getRootDir() . '/src/' . $path), $arguments);
     }
 
     /**

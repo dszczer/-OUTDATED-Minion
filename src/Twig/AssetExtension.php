@@ -62,9 +62,9 @@ class AssetExtension extends \Twig_Extension
      * Return fixed asset's path.
      *
      * @param string $asset      Path to the asset
-     * @param bool   $serverPath server-related path or web-related
+     * @param bool   $serverPath Server-related path or web-related
      *
-     * @throws FileException
+     * @throws FileException File does not exist on server
      *
      * @return string
      */

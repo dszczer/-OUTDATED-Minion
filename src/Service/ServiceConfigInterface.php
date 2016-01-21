@@ -46,7 +46,7 @@ interface ServiceConfigInterface
      *
      * @return mixed Option value
      *
-     * @throws \InvalidArgumentException If tag is not defined
+     * @throws \InvalidArgumentException Tag is not defined
      */
     public function getOption($name);
 

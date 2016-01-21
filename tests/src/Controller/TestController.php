@@ -10,6 +10,7 @@
 
 namespace Minion\Tests\Controller;
 
+use Minion\Application;
 use Minion\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ class TestController extends Controller
      *
      * @return Response
      */
-    public function testAction(Request $request) {
+    public function testAction(Request $request, Application $app) {
         return $this->render('test.html.twig', ['arg' => 'sample argument']);
     }
 
