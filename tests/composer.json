@@ -1,8 +1,0 @@
-{
-    "info": "This file is only for test purpose and has nothing to do with Composer",
-    "autoload": {
-        "psr-0": {
-            "Minion\\Tests\\": "src"
-        }
-    }
-}
