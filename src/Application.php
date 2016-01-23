@@ -296,8 +296,6 @@ class Application extends SilexApp
         if($this['debug'])
             return $response;
         else {
-            if($this['minion.useTwig'])
-                $twig = $this['twig'];
             $content = <<<'HTML'
 <!DOCTYPE html>
 <html>
@@ -307,6 +305,7 @@ class Application extends SilexApp
 HTML;
 
             if($this['minion.useTwig']) {
+                $twig = $this['twig'];
                 $tpl = "Static/$code.html.twig";
                 if(!Utils::templateExists($twig, $tpl))
                     $content = \str_replace('%d', $code, $content);

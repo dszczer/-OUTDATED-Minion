@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class Minion\Console</title>
+
+	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+				<h3>Namespaces</h3>
+			<ul>
+				<li class="active">
+					<a href="namespace-Minion.html">
+						Minion<span></span>
+					</a>
+
+						<ul>
+				<li>
+					<a href="namespace-Minion.Service.html">
+						Service					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Minion.Twig.html">
+						Twig					</a>
+
+						</li>
+							</ul></li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Minion.Application.html">Application</a></li>
+				<li class="active"><a href="class-Minion.Console.html">Console</a></li>
+				<li><a href="class-Minion.Controller.html">Controller</a></li>
+				<li><a href="class-Minion.Utils.html">Utils</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-Minion.ControllerInterface.html">ControllerInterface</a></li>
+			</ul>
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-Minion.html" title="Summary of Minion"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class Console</h1>
+
+
+	<div class="description">
+	<p>Class Console.</p>
+	</div>
+
+	<dl class="tree">
+		<dd style="padding-left:0px">
+Silex\Application
+			
+			
+		</dd>
+		<dd style="padding-left:30px">
+			<img src="resources/inherit.png" alt="Extended by">
+			<a href="class-Minion.Application.html"><span>Minion\Application</span></a>
+			
+			
+			
+		</dd>
+		<dd style="padding-left:60px">
+			<img src="resources/inherit.png" alt="Extended by">
+<b><span>Minion\Console</span></b>			
+			
+			
+		</dd>
+	</dl>
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-Minion.html">Minion</a><br>
+		<b>Package:</b> Minion<br>
+
+				<b>Author:</b>
+				Damian Szczerbiński <a href="&#109;&#97;&#x69;l&#116;&#x6f;&#x3a;d&#115;&#x7a;&#x63;&#122;&#101;&#x72;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#109;">d&#115;&#x7a;&#x63;&#122;&#101;&#x72;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a><br>
+			<b>Located at</b> <a href="source-class-Minion.Console.html#17-148" title="Go to source code">Console.php</a>
+		<br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Minion.Console.html">Minion\Console</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-Minion.Console.html#28-66" title="Go to source code">__construct</a>( <span>string <var>$appNamespace</var> = <span class="php-quote">''</span></span>, <span>array <var>$values</var> = []</span>, <span>array <var>$fixPaths</var> = []</span> )</code>
+
+		<div class="description short">
+			<p>Console constructor.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Console constructor.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$appNamespace</var></dt>
+					<dd>Application namespace (autodetect, if empty)</dd>
+					<dt><var>$values</var></dt>
+					<dd>Default options</dd>
+					<dt><var>$fixPaths</var></dt>
+					<dd>Path fixes</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Minion.Console.html">Minion\Console</a></code>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>Missing propel configuration file<br>
+					InvalidArgumentException<br>Can not resolve project namespace<br>
+					InvalidConfigurationException<br>Twig engine is not enabled, but extension configured in config.yml file<br>
+					RuntimeException<br>File parameters.yml does not exist<br>
+					Exception<br>Throws raw exceptions in test environment
+				</div>
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Minion.Application.html#___construct">Minion\Application::__construct()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getCommandPath" id="_getCommandPath">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getCommandPath">#</a>
+		<code><a href="source-class-Minion.Console.html#68-75" title="Go to source code">getCommandPath</a>( )</code>
+
+		<div class="description short">
+			<p>Get project command directory path.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get project command directory path.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="run" id="_run">
+
+		<td class="attributes"><code>
+			 public 
+
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_run">#</a>
+		<code><a href="source-class-Minion.Console.html#77-88" title="Go to source code">run</a>( <span>Symfony\Component\HttpFoundation\Request <var>$request</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			<p>Run console.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Run console.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$request</var></dt>
+					<dd>Request object (not used in commands). Only to match inheritance requirements.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					mixed
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loadCommands" id="_loadCommands">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loadCommands">#</a>
+		<code><a href="source-class-Minion.Console.html#90-147" title="Go to source code">loadCommands</a>( <span>string <var>$path</var></span>, <span>string|null <var>$prefix</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			<p>Load all Command files from $path directory.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Load all Command files from $path directory.</p>
+
+<p>Traverse all files inside specified directory, but loads only those files with suffix 'Command.php'.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$path</var></dt>
+					<dd>Directory with Command files</dd>
+					<dt><var>$prefix</var></dt>
+					<dd>Commands namespace</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-Minion.Application.html#methods">Minion\Application</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Minion.Application.html#_fastAbort">fastAbort()</a>, 
+			<a href="class-Minion.Application.html#_getAppNamespace">getAppNamespace()</a>, 
+			<a href="class-Minion.Application.html#_getConfigPath">getConfigPath()</a>, 
+			<a href="class-Minion.Application.html#_getPackageDir">getPackageDir()</a>, 
+			<a href="class-Minion.Application.html#_getPropelConfigPath">getPropelConfigPath()</a>, 
+			<a href="class-Minion.Application.html#_getRootDir">getRootDir()</a>, 
+			<a href="class-Minion.Application.html#_minionError">minionError()</a>, 
+			<a href="class-Minion.Application.html#_resolvePaths">resolvePaths()</a>
+		</code></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+	<table class="summary inherited">
+	<caption>Constants inherited from <a href="class-Minion.Application.html#constants">Minion\Application</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Minion.Application.html#VERSION"><b>VERSION</b></a>
+		</code></td>
+	</tr>
+	</table>
+
+
+
+	<table class="summary properties" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="commandPath" id="$commandPath">
+		<td class="attributes"><code>
+			public  
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Minion.Console.html#25-26" title="Go to source code"><var>$commandPath</var></a>
+
+			<div class="description short">
+				<p>Command path</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Command path</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$commandPath" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	</table>
+
+	<table class="summary inherited">
+	<caption>Properties inherited from <a href="class-Minion.Application.html#properties">Minion\Application</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Minion.Application.html#$appNamespace"><var>$appNamespace</var></a>, 
+			<a href="class-Minion.Application.html#$configPath"><var>$configPath</var></a>, 
+			<a href="class-Minion.Application.html#$packageDir"><var>$packageDir</var></a>, 
+			<a href="class-Minion.Application.html#$propelConfigPath"><var>$propelConfigPath</var></a>, 
+			<a href="class-Minion.Application.html#$rootDir"><var>$rootDir</var></a>
+		</code></td>
+	</tr>
+	</table>
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>

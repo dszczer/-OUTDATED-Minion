@@ -90,10 +90,9 @@ class Console extends Application
     /**
      * Load all Command files from $path directory.
      *
-     * Traverse all files inside specified directory, but loads only those files, where class is
-     * an instance of Knp\Command\Command class.
+     * Traverse all files inside specified directory, but loads only those files with suffix 'Command.php'.
      *
-     * @param string      $path Directory with Command files
+     * @param string      $path   Directory with Command files
      * @param string|null $prefix Commands namespace
      *
      * @return void
