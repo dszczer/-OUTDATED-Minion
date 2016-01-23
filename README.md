@@ -139,7 +139,7 @@ class DefaultController extends Controller
 }
 ```
 **IMPORTANT:** action shall **always** return an `Symfony\HttpFoundation\Response` object *(exactly like in Symfony 2)*.
-For more information about avaliable methods, look into [API documentation](https://github.com/dszczer/Minion/doc/class-Minion.Controller.html).
+For more information about avaliable methods, look into [API documentation](http://dszczer.github.io/Minion/class-Minion.Controller.html).
 
 #### Services
 Services in Minion are something between Silex and Symfony 2. They are expandable, flexible and easy in use.
@@ -266,7 +266,7 @@ List of build-in twig extensions:
 - `AssetExtension` - assets for web use, helps to define web side or server side related paths
 - `MiscExtension` - some miscellaneous functions thay may be useful
 - `UrlExtension` - generating links in templates with this is easy
-For more information about avaliable methods, see [API documentation](https://github.com/dszczer/Minion/doc/class-Minion.Twig.AssetExtension.html).
+For more information about avaliable methods, see [API documentation](http://dszczer.github.io/Minion/class-Minion.Twig.AssetExtension.html).
 
 #### Error pages
 Minion allows you to customize error pages for `403`, `404` and `500` HTTP status codes. Inside your template scope *only* thrown exception would be avaliable under (Twig) `exception` or (PHP) `$exception` variable name.
@@ -324,4 +324,4 @@ Required `$path` argument is an **absolute** path to directory containing comman
 
 
 ## API Documentation
-[Click here](https://github.com/dszczer/Minion/doc/index.html) to see detailed API documentation.
+[Click here](http://dszczer.github.io/Minion/) to see detailed API documentation.
