@@ -100,12 +100,10 @@ class Console extends Application
     public function loadCommands($path, $prefix = null) {
         // load commands
         try {
-            $iterator = new \RecursiveDirectoryIterator($path,
-                \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_FILEINFO
-            );
+            $iterator = new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS);
 
             /** @var \RecursiveDirectoryIterator $child */
-            foreach($iterator->getChildren() as $child)
+            foreach($iterator as $child)
                 if($child->isFile() && \preg_match('/Command.php$/', $child->getBasename())) {
                     $namespace = $class = "";
                     $gettingNamespace = $gettingClass = false;

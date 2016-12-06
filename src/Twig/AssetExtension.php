@@ -72,10 +72,10 @@ class AssetExtension extends \Twig_Extension
         /** @var Request|null $request */
         $request = isset($this->container['request']) ? $this->container['request'] : null;
         $path = \ltrim($asset, '/\\');
-        $assetPath = Utils::fixPath($this->container->getRootDir() . '/web/' . $path);
+        $assetPath = Utils::fixPath($this->container->getRootDir() . '/' . $path);
 
-        if(!\file_exists($assetPath))
-            throw new FileException("Asset '$asset' with path '$assetPath' not found");
+//        if(!\file_exists($assetPath))
+//            throw new FileException("Asset '$asset' with path '$assetPath' not found");
 
         if(!$serverPath)
             if($request instanceof Request)

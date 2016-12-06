@@ -18,6 +18,7 @@ use Minion\Twig\AssetExtension;
 use Minion\Twig\MiscExtension;
 use Minion\Twig\TwigExtensionTagServiceProvider;
 use Minion\Twig\UrlExtension;
+use Monolog\Logger;
 use Propel\Runtime\Exception\InvalidArgumentException;
 use Propel\Silex\PropelServiceProvider;
 use Silex\Application as SilexApp;
@@ -30,8 +31,12 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\Route;
@@ -162,13 +167,14 @@ class Application extends SilexApp
                 'monolog.logfile' => $this->getRootDir() . Utils::fixPath('/var/log/') .
                     ($this['debug'] ? 'dev.log' : 'prod.log'),
                 'monolog.name' => $this->getAppNamespace(),
+                'monolog.level' => $this['debug'] ? Logger::DEBUG : Logger::WARNING
             ]);
 
             if($this['minion.useTwig']) {
                 $this->register(new TwigServiceProvider(), [
                     'twig.path' => $this->getRootDir() . Utils::fixPath('/src/Resources/views'),
                     'twig.options' => [
-                        'cache' => $this->getRootDir() . Utils::fixPath('/var/cache/twig'),
+                        'cache' => $this['debug'] ? false : $this->getRootDir() . Utils::fixPath('/var/cache/twig'),
                     ],
                 ]);
                 // load Twig Extensions
@@ -255,6 +261,10 @@ class Application extends SilexApp
                                         $provider->setServiceConfig($serviceConfig);
                                         $this->register($provider, $serviceConfig->getOptions());
                                         break;
+                                    case 'kernel.response':
+                                        $calledTags[] = $tag;
+                                        $this['event.listener.response'] = $class . '::' . $serviceConfig->getOption('method');
+                                        break;
                                 }
                             }
                         }
@@ -274,6 +284,19 @@ class Application extends SilexApp
             else
                 $this->fastAbort($ex);
         }
+    }
+
+    public function run(Request $request = null) {
+        if (null === $request) {
+            $request = Request::createFromGlobals();
+        }
+
+        $response = $this->handle($request);
+        $ret = call_user_func($this['event.listener.response'], $request, $response, $this);
+        if($ret instanceof Response)
+            $response = $ret;
+        $response->send();
+        $this->terminate($request, $response);
     }
 
     /**
@@ -296,15 +319,15 @@ class Application extends SilexApp
         if($this['debug'])
             return $response;
         else {
-            $content = <<<'HTML'
+            $content = <<<HTML
 <!DOCTYPE html>
 <html>
-    <head><title>Error %d</title></head>
-    <body><h1>Error %d occured</h1></body>
+    <head><title>Error $code</title></head>
+    <body><h1>Error {$exception->getMessage()} occured</h1></body>
 </html>
 HTML;
 
-            if($this['minion.useTwig']) {
+            if($this['minion.useTwig'] && isset($this['twig'])) {
                 $twig = $this['twig'];
                 $tpl = "Static/$code.html.twig";
                 if(!Utils::templateExists($twig, $tpl))
