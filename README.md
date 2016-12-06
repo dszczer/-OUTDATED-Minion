@@ -324,4 +324,4 @@ Required `$path` argument is an **absolute** path to directory containing comman
 
 
 ## API Documentation
-[Click here](http://dszczer.github.io/Minion/) to see detailed API documentation.
+[Click here](http://dszczer.github.io/-OUTDATED-Minion/) to see detailed API documentation.
